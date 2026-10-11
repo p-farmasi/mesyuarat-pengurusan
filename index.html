@@ -117,6 +117,10 @@
     -webkit-overflow-scrolling: touch;
   }
   .dock-track::-webkit-scrollbar { display: none; }
+  /* Fade the edge that has more icons hidden, so users know they can slide */
+  .dock-track.more-r { -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
+  .dock-track.more-l { -webkit-mask-image: linear-gradient(270deg, #000 82%, transparent); mask-image: linear-gradient(270deg, #000 82%, transparent); }
+  .dock-track.more-l.more-r { -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
   .dock-btn {
     flex: none; scroll-snap-align: start; min-width: 88px;
     display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -341,6 +345,10 @@
     <button class="dock-btn" data-action="bengkel">
       <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
       <span class="lb">Bengkel</span>
+    </button>
+    <button class="dock-btn" data-action="urusetia">
+      <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></span>
+      <span class="lb">Urusetia</span>
     </button>
   </div>
 </nav>
@@ -567,9 +575,27 @@ var DOKUMEN_BENGKEL = []; // pautan akan diberikan kemudian
           open('Bengkel', icon, accessAlert + (DOKUMEN_BENGKEL.length ? docList(DOKUMEN_BENGKEL)
             : '<div class="pending"><b>Pautan akan dikongsi kemudian</b>Dokumen bengkel akan dimuat naik di sini.</div>'));
           break;
+        case 'urusetia':
+          open('Urusetia', icon,
+            '<div class="msg" style="padding-top:12px"><div class="mi" style="background:var(--accent-soft);color:var(--accent)">' + icon + '</div>' +
+            '<h4>Hubungi Urusetia</h4>' +
+            '<p>Perlukan bantuan, hubungi saya (En. Muhammad Fadhli Bin Abd Razak).</p>' +
+            '<div class="actions"><a class="wa" href="' + WHATSAPP + '" target="_blank" rel="noopener">' + waIcon + 'WhatsApp Urusetia</a></div></div>');
+          break;
       }
     });
   });
+
+  // ----- Dock slide hint -----
+  var track = document.querySelector('.dock-track');
+  function dockEdges() {
+    var max = track.scrollWidth - track.clientWidth;
+    track.classList.toggle('more-l', track.scrollLeft > 4);
+    track.classList.toggle('more-r', track.scrollLeft < max - 4);
+  }
+  track.addEventListener('scroll', dockEdges, { passive: true });
+  window.addEventListener('resize', dockEdges);
+  dockEdges();
 
   // ----- Tentatif tabs -----
   var tabs = document.querySelectorAll('.tab');
