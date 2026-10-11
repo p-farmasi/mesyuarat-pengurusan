@@ -354,18 +354,67 @@
    ========================================================= */
 var WHATSAPP = 'https://wa.me/601110043045';
 
-// Senarai peserta (MOCK — akan diganti). Setiap peserta ada pautan Google Form sendiri.
+// Senarai peserta. Pautan kehadiran dijana daripada nama (ruang → '+').
+var BORANG_HADIR = 'https://docs.google.com/forms/d/e/1FAIpQLSc28cA3WxMt0QCEfns5hvHDAtig1J7FKq4ChmItcX_P1RJ8wQ/formResponse?&entry.1877688852=';
+var BORANG_TIADA_NAMA = 'https://docs.google.com/forms/d/e/1FAIpQLSeicT1Iv4uKPbHwhP-M4D6GBt8fqhXLQ8-uYTl_PiUP_YejxA/viewform?usp=sharing&ouid=105559788097757848293';
 var PESERTA = [
-  { nama: 'Peserta Contoh 1', organisasi: 'BDPSF, KKM', pautan: '' },
-  { nama: 'Peserta Contoh 2', organisasi: 'JKN Selangor', pautan: '' },
-  { nama: 'Peserta Contoh 3', organisasi: 'JKN Johor', pautan: '' },
-  { nama: 'Peserta Contoh 4', organisasi: 'JKN Negeri Sembilan', pautan: '' },
-  { nama: 'Peserta Contoh 5', organisasi: 'JKN Perak', pautan: '' },
-  { nama: 'Peserta Contoh 6', organisasi: 'JKN Pulau Pinang', pautan: '' },
-  { nama: 'Peserta Contoh 7', organisasi: 'JKN Sabah', pautan: '' },
-  { nama: 'Peserta Contoh 8', organisasi: 'JKN Sarawak', pautan: '' },
-  { nama: 'Peserta Contoh 9', organisasi: 'Hospital Kuala Lumpur', pautan: '' },
-  { nama: 'Peserta Contoh 10', organisasi: 'BAPF, KKM', pautan: '' }
+  "YBrs. Puan Nur'Ain Shuhaila binti Shohaimi",
+  "YBrs. Puan Rohana binti Hassan",
+  "Pn. Nor Anizah binti Osman",
+  "Pn. Ruzita binti Awang",
+  "En. Haji Ridhwan bin Abdullah",
+  "En. Zulkhairi bin Mohamed Daud",
+  "YBhg. Datin Shuhaila binti Ayob",
+  "Pn. Saidatul Raihan binti Ibrahim",
+  "YBrs. Dr Mastura binti Ahmad",
+  "Pn. Noraini binti Ab Kadir",
+  "YBrs. Dr Liau Siow Yen",
+  "Pn. Azura binti Musa",
+  "Pn. Rubiyaton Jamaludin",
+  "YBhg. Datin Hasnizan binti Hasan",
+  "Pn. Shahnaz binti Bishahrin",
+  "Pn. Nadyawati binti Che Nordin",
+  "Pn. Zuraidah binti Ali",
+  "Pn. Normi binti Kamaruzaman",
+  "Pn Harianty binti Ghazali",
+  "Pn. Tan Meng Wah",
+  "Pn Huang Leh Ing",
+  "Pn. Baa Fazlini Binti Haron",
+  "Pn Mazliha Binti Abu Bakar",
+  "Pn. Zanisah Binti Ahmad Torky",
+  "YBhg. Datin Noraini Binti Sa'ari",
+  "Pn. Hasniza binti Mohamed",
+  "Pn. Suhana Hussein",
+  "Pn. Zaidah binti Abd Karim",
+  "Pn. Nor Fadhilahanim binti Ramli",
+  "Pn. Norhayati binti Musa",
+  "Pn. Rosfazilah binti Dahlan",
+  "Pn. Nurhairani Binti Abdul Latif",
+  "Pn. Munira binti Muhammad",
+  "Pn. Nadzifah @ Rashidah binti Mohd Ariffin",
+  "YBrs. Dr. Abdul Haniff bin Mohamad Yahaya",
+  "Pn. Nur Fasihah binti Ashari",
+  "Pn. Azura binti Omar",
+  "En. Muhammad Fadhli bin Abd Razak",
+  "En. Mohd Hafizuddin bin Mohd Jaini",
+  "Pn. Nur 'Amirah binti Mohd Maaszali",
+  "Pn. Rosnariza binti Abdullah",
+  "Pn. Norbaizura binti Zolkefli",
+  "Pn. Nur Akmam binti Ahmad Zawadi",
+  "Pn. Zalaiwati binti Zakaria",
+  "Pn. Marlia binti Che Mansor",
+  "En. Mohd Azuwan bin Mohd Zubir",
+  "En. Muhammad Syafiq bin Saleh",
+  "Pn. Siti Nurul Fathihah binti Baharudin",
+  "Pn. Masliana binti Awang",
+  "Pn. Chan Pui Lim",
+  "Cik Choo Yai Wen",
+  "Cik Nurkhadija binti Rohani",
+  "Pn. Nurzita binti Ahmad Nasir",
+  "Pn. Aznur binti Muhammad",
+  "Cik Saidatul Sheeda binti Ahmad Shukri",
+  "En. Mohd Azli Fakri bin Abdul Aziz",
+  "En. Khairul Iman bin Muzakir"
 ];
 
 var DOKUMEN_MESYUARAT = [
@@ -388,7 +437,11 @@ var DOKUMEN_BENGKEL = []; // pautan akan diberikan kemudian
   var lastFocus = null;
 
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
-  var initials = function (n) { return n.split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase(); };
+  var GELARAN = /^(ybrs|ybhg|pn|puan|en|encik|cik|dr|datin|dato|datuk|haji|hajah)\.?$/i;
+  var initials = function (n) {
+    var w = n.split(/\s+/).filter(function (x) { return x && !GELARAN.test(x) && !/^(bin|binti|@)$/i.test(x); });
+    return w.slice(0, 2).map(function (x) { return x.replace(/[^A-Za-z]/g, '')[0] || ''; }).join('').toUpperCase();
+  };
   var arrow = '<svg class="go" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
   var waIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.04 21.5h-.01a9.45 9.45 0 0 1-4.82-1.32l-.35-.21-3.58.94.96-3.49-.23-.36a9.43 9.43 0 0 1-1.45-5.03c0-5.22 4.25-9.46 9.48-9.46 2.53 0 4.9.99 6.69 2.78a9.4 9.4 0 0 1 2.77 6.69c0 5.22-4.25 9.46-9.46 9.46zm8.05-17.51A11.32 11.32 0 0 0 12.04.66C5.77.66.66 5.76.66 12.03c0 2 .52 3.96 1.52 5.68L.57 23.5l5.92-1.55a11.37 11.37 0 0 0 5.54 1.41h.01c6.27 0 11.37-5.1 11.38-11.37 0-3.04-1.18-5.9-3.33-8.05z"/></svg>';
 
@@ -428,39 +481,53 @@ var DOKUMEN_BENGKEL = []; // pautan akan diberikan kemudian
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
 
   // ----- Kehadiran -----
+  // Nama → pautan borang: ruang menjadi '+', aksara lain dikodkan
+  var hadirLink = function (nama) { return BORANG_HADIR + encodeURIComponent(nama).replace(/%20/g, '+') + '&submit=Submit'; };
+  // Carian tidak sensitif huruf besar/kecil dan tanda baca
+  var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); };
+
   function renderPeople(q) {
-    q = (q || '').trim().toLowerCase();
-    var list = PESERTA.filter(function (p) { return !q || (p.nama + ' ' + p.organisasi).toLowerCase().indexOf(q) > -1; });
-    var html = '<div class="count">' + list.length + ' daripada ' + PESERTA.length + ' peserta</div>';
-    if (!list.length) return html + '<div class="empty">Tiada nama ditemui. Hubungi urusetia jika nama anda tiada dalam senarai.</div>';
-    return html + '<ul class="people">' + list.map(function (p) {
-      var i = PESERTA.indexOf(p);
-      return '<li><button class="person" data-i="' + i + '"><span class="avatar">' + esc(initials(p.nama)) + '</span>' +
-        '<span class="t">' + esc(p.nama) + '<small>' + esc(p.organisasi) + '</small></span><span class="go">Hadir →</span></button></li>';
+    q = norm(q || '');
+    if (!q) return '<div class="empty">Taip nama anda untuk mencari dalam senarai peserta.</div>';
+    var terms = q.split(' ');
+    var list = [];
+    PESERTA.forEach(function (nama, i) {
+      var n = norm(nama);
+      if (terms.every(function (t) { return n.indexOf(t) > -1; })) list.push(i);
+    });
+    if (!list.length) {
+      return '<div class="confirm" style="padding-top:18px"><h4>Tiada Nama</h4>' +
+        '<p>Nama anda tiada dalam senarai. Sila isi borang kehadiran di bawah.</p>' +
+        '<div class="actions"><a class="btn primary" href="' + esc(BORANG_TIADA_NAMA) + '" target="_blank" rel="noopener">Isi Borang Kehadiran ↗</a></div></div>';
+    }
+    return '<div class="count">' + list.length + ' nama ditemui</div><ul class="people">' + list.map(function (i) {
+      var nama = PESERTA[i];
+      return '<li><button class="person" data-i="' + i + '"><span class="avatar">' + esc(initials(nama)) + '</span>' +
+        '<span class="t">' + esc(nama) + '</span><span class="go">Hadir →</span></button></li>';
     }).join('') + '</ul>';
   }
-  function showKehadiran(icon) {
+  function showKehadiran(icon, query) {
     open('Kehadiran', icon,
       '<div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
-      '<input type="search" id="q" placeholder="Cari nama atau organisasi…" autocomplete="off"></div>' +
-      '<div id="plist">' + renderPeople('') + '</div>');
+      '<input type="search" id="q" placeholder="Cari nama anda…" autocomplete="off"></div>' +
+      '<div id="plist"></div>');
     var q = document.getElementById('q'), plist = document.getElementById('plist');
+    q.value = query || '';
+    plist.innerHTML = renderPeople(q.value);
     q.addEventListener('input', function () { plist.innerHTML = renderPeople(q.value); });
     plist.addEventListener('click', function (e) {
       var b = e.target.closest('.person'); if (!b) return;
-      confirmPerson(PESERTA[+b.dataset.i], icon);
+      confirmPerson(PESERTA[+b.dataset.i], icon, q.value);
     });
   }
-  function confirmPerson(p, icon) {
-    var hasLink = !!p.pautan;
+  function confirmPerson(nama, icon, query) {
     open('Sahkan Kehadiran', icon,
-      '<div class="confirm"><div class="avatar">' + esc(initials(p.nama)) + '</div>' +
-      '<h4>' + esc(p.nama) + '</h4><p>' + esc(p.organisasi) + '</p>' +
-      (hasLink ? '<p style="margin-top:14px">Anda akan dibawa ke borang Google untuk menghantar pengesahan kehadiran.</p>'
-               : '<p style="margin-top:14px">Pautan borang kehadiran belum tersedia. Sila cuba semula kemudian.</p>') +
+      '<div class="confirm"><div class="avatar">' + esc(initials(nama)) + '</div>' +
+      '<h4>' + esc(nama) + '</h4>' +
+      '<p style="margin-top:14px">Tekan butang di bawah untuk menghantar pengesahan kehadiran anda.</p>' +
       '<div class="actions"><button class="btn" id="back">← Kembali</button>' +
-      '<a class="btn primary" ' + (hasLink ? 'href="' + esc(p.pautan) + '" target="_blank" rel="noopener"' : 'aria-disabled="true"') + '>Hantar Kehadiran</a></div></div>');
-    document.getElementById('back').addEventListener('click', function () { showKehadiran(icon); });
+      '<a class="btn primary" href="' + esc(hadirLink(nama)) + '" target="_blank" rel="noopener">Hantar Kehadiran</a></div></div>');
+    document.getElementById('back').addEventListener('click', function () { showKehadiran(icon, query); });
   }
 
   // ----- Dock actions -----
