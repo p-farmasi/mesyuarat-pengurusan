@@ -2,30 +2,502 @@
 <html lang="ms">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pengurusan Farmasi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bengkel &amp; Mesyuarat Teknikal Farmasi</title>
+<meta name="description" content="Bengkel Pelan Tindakan BDPSF KKM 2027 dan Mesyuarat Teknikal Pengurusan Perkhidmatan Farmasi Bil. 2/2026 — 12–13 Oktober 2026">
+<meta name="theme-color" content="#0b2545">
+<link rel="icon" href="img/jata.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root { --navy: #0b2545; --accent: #0e9f8f; --muted: #5d6b7e; --bg: #f4f6f9; }
-  * { box-sizing: border-box; margin: 0; }
+  :root {
+    --navy: #0b2545;
+    --navy-2: #13315c;
+    --accent: #0e9f8f;
+    --accent-soft: #e3f4f1;
+    --gold: #c9a227;
+    --ink: #1c2533;
+    --muted: #5d6b7e;
+    --line: #dfe5ec;
+    --panel: #f4f6f9;
+    --card: #ffffff;
+    --wa: #25d366;
+    --font: "Inter", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    min-height: 100vh; display: grid; place-items: center; padding: 16px;
-    background: var(--bg); color: var(--navy);
-    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font); color: var(--ink); background: var(--panel);
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+    padding-bottom: calc(130px + env(safe-area-inset-bottom));
   }
-  .card {
-    max-width: 520px; width: 100%; background: #fff; border-radius: 14px; padding: 40px;
-    border-top: 6px solid var(--accent); box-shadow: 0 10px 30px rgba(11,37,69,.08);
+  a { color: inherit; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 0 16px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; overflow: hidden; color: #fff;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    padding: 56px 0 88px;
   }
-  .tag { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
-  h1 { font-size: 30px; margin: 12px 0 10px; }
-  p { color: var(--muted); line-height: 1.5; }
+  .hero::after {
+    content: ""; position: absolute; right: -160px; bottom: -220px; width: 480px; height: 480px;
+    border-radius: 50%; border: 60px solid rgba(14,159,143,.18); pointer-events: none;
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .logo {
+    width: 96px; height: 96px; border-radius: 50%; background: #fff; display: grid; place-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  }
+  .logo img { width: 84px; height: 84px; object-fit: contain; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 28px;
+    font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #8fd8cf;
+  }
+  .eyebrow::before { content: ""; width: 24px; height: 3px; background: currentColor; border-radius: 2px; }
+  .hero h1 { margin-top: 14px; font-size: clamp(26px, 4.6vw, 42px); line-height: 1.15; font-weight: 800; letter-spacing: -.01em; }
+  .hero h1 span { display: block; margin-top: 10px; font-size: .62em; font-weight: 600; color: #c8d5e6; line-height: 1.3; }
+  .hero h1 em { font-style: normal; color: #8fd8cf; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); font-size: 15px; font-weight: 600;
+  }
+  .chip svg { color: #8fd8cf; flex: none; }
+
+  /* ---------- Tentatif ---------- */
+  .section { margin-top: -48px; position: relative; z-index: 2; scroll-margin-top: 16px; }
+  .panel { background: var(--card); border-radius: 16px; box-shadow: 0 10px 30px rgba(11,37,69,.08); padding: 28px 24px; }
+  .panel-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 14px; }
+  .panel-head h2 { font-size: 26px; font-weight: 800; color: var(--navy); }
+  .panel-head .sub { font-size: 14px; color: var(--muted); }
+
+  .tabs { display: inline-flex; background: var(--panel); border-radius: 10px; padding: 4px; gap: 4px; }
+  .tab {
+    border: 0; background: transparent; font: inherit; font-size: 14px; font-weight: 700; color: var(--muted);
+    padding: 9px 16px; border-radius: 8px; cursor: pointer; transition: background .2s, color .2s;
+  }
+  .tab[aria-selected="true"] { background: var(--navy); color: #fff; }
+
+  .day { display: none; margin-top: 24px; }
+  .day.show { display: block; }
+  .tl { list-style: none; position: relative; }
+  .tl::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: var(--line); }
+  .tl li { position: relative; padding: 0 0 18px 34px; }
+  .tl li:last-child { padding-bottom: 0; }
+  .tl li::before {
+    content: ""; position: absolute; left: 0; top: 6px; width: 16px; height: 16px; border-radius: 50%;
+    background: #fff; border: 3px solid #c3ccd8;
+  }
+  .tl li.key::before { border-color: var(--accent); background: var(--accent); }
+  .tl .time { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: .02em; }
+  .tl .what { font-size: 16px; font-weight: 600; color: var(--navy); margin-top: 2px; }
+  .tl li:not(.key) .what { font-weight: 500; color: var(--ink); }
+  .tl li.key .box { background: var(--accent-soft); border-radius: 12px; padding: 12px 16px; margin-top: 6px; }
+  .tl li.key .what { margin-top: 0; }
+  .tl ul { margin: 6px 0 0 18px; font-size: 15px; color: var(--ink); }
+  .tl ul li { padding: 0; margin: 3px 0; }
+  .tl ul li::before { display: none; }
+  .tl .tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: var(--navy); color: #fff; margin-bottom: 6px; }
+  .tl .tag.gold { background: var(--gold); }
+  .note { margin-top: 24px; font-size: 13px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 14px; }
+
+  footer { text-align: center; font-size: 13px; color: var(--muted); margin-top: 32px; }
+
+  /* ---------- Floating dock ---------- */
+  .dock {
+    position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+    z-index: 20; max-width: calc(100% - 32px);
+    background: rgba(255,255,255,.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 16px 40px rgba(11,37,69,.18);
+    padding: 8px;
+  }
+  .dock-track {
+    display: flex; gap: 4px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .dock-track::-webkit-scrollbar { display: none; }
+  .dock-btn {
+    flex: none; scroll-snap-align: start; min-width: 88px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    border: 0; background: transparent; font: inherit; cursor: pointer; color: var(--navy);
+    padding: 10px 12px 8px; border-radius: 16px; transition: background .2s, transform .2s;
+  }
+  .dock-btn .ic {
+    width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
+    background: var(--panel); color: var(--navy); transition: background .2s, color .2s, transform .25s cubic-bezier(.3,1.6,.5,1), box-shadow .2s;
+  }
+  .dock-btn .lb { font-size: 12px; font-weight: 700; letter-spacing: .02em; color: var(--muted); transition: color .2s; white-space: nowrap; }
+  .dock-btn:hover .ic, .dock-btn:focus-visible .ic {
+    background: var(--navy); color: #fff; transform: translateY(-6px) scale(1.06); box-shadow: 0 10px 20px rgba(11,37,69,.25);
+  }
+  .dock-btn:hover .lb, .dock-btn:focus-visible .lb { color: var(--navy); }
+  .dock-btn:active .ic { transform: scale(.94); }
+  .dock-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Modal ---------- */
+  .modal { position: fixed; inset: 0; z-index: 50; display: none; }
+  .modal.open { display: block; }
+  .backdrop { position: absolute; inset: 0; background: rgba(10,26,48,.55); opacity: 0; transition: opacity .25s; }
+  .modal.open .backdrop { opacity: 1; }
+  .sheet {
+    position: absolute; left: 50%; top: 50%; width: min(560px, calc(100% - 32px)); max-height: calc(100% - 48px);
+    transform: translate(-50%, -46%); opacity: 0; transition: transform .25s ease, opacity .25s ease;
+    background: #fff; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .modal.open .sheet { transform: translate(-50%, -50%); opacity: 1; }
+  .sheet-head { display: flex; align-items: center; gap: 14px; padding: 22px 22px 16px; border-bottom: 1px solid var(--line); }
+  .sheet-head .ic { width: 42px; height: 42px; border-radius: 12px; background: var(--navy); color: #fff; display: grid; place-items: center; flex: none; }
+  .sheet-head h3 { font-size: 19px; font-weight: 800; color: var(--navy); flex: 1; }
+  .x { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--line); background: #fff; cursor: pointer; display: grid; place-items: center; color: var(--muted); }
+  .x:hover { background: var(--panel); color: var(--navy); }
+  .sheet-body { padding: 20px 22px 24px; overflow-y: auto; }
+
+  .alert {
+    display: flex; gap: 12px; align-items: flex-start; background: #fbf5e1; border-left: 5px solid var(--gold);
+    border-radius: 0 12px 12px 0; padding: 14px 16px; font-size: 14.5px; color: var(--ink);
+  }
+  .alert svg { flex: none; color: var(--gold); margin-top: 2px; }
+  .wa {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; text-decoration: none;
+    background: var(--wa); color: #fff; font-weight: 700; font-size: 14px; padding: 8px 14px; border-radius: 999px;
+    transition: filter .2s;
+  }
+  .wa:hover { filter: brightness(.92); }
+
+  .docs { list-style: none; margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+  .doc-group { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 8px 0 -2px; }
+  .doc {
+    display: flex; align-items: center; gap: 14px; text-decoration: none; padding: 14px 16px; border-radius: 12px;
+    border: 1px solid var(--line); background: #fff; transition: border-color .2s, background .2s, transform .2s;
+  }
+  .doc:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateX(3px); }
+  .doc .n { width: 34px; height: 34px; border-radius: 9px; background: var(--panel); color: var(--navy); font-weight: 800; font-size: 13px; display: grid; place-items: center; flex: none; }
+  .doc .t { flex: 1; font-size: 15px; font-weight: 600; color: var(--navy); line-height: 1.35; }
+  .doc .t small { display: block; font-weight: 500; color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .doc .go { color: var(--accent); flex: none; }
+  .doc.sub { margin-left: 22px; }
+
+  .pending { margin-top: 18px; text-align: center; padding: 26px 16px; border: 2px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: 14.5px; }
+  .pending b { display: block; color: var(--navy); font-size: 16px; margin-bottom: 4px; }
+
+  .search { position: relative; }
+  .search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+  .search input {
+    width: 100%; font: inherit; font-size: 16px; padding: 13px 14px 13px 42px; border-radius: 12px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink); outline: none; transition: border-color .2s, background .2s;
+  }
+  .search input:focus { border-color: var(--accent); background: #fff; }
+  .count { font-size: 13px; color: var(--muted); margin: 12px 2px 8px; }
+  .people { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .person {
+    width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; cursor: pointer;
+    font: inherit; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: #fff;
+    transition: border-color .2s, background .2s;
+  }
+  .person:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+  .person .t { flex: 1; font-size: 15px; font-weight: 600; color: var(--navy); }
+  .person .t small { display: block; font-weight: 500; color: var(--muted); font-size: 13px; }
+  .person .go { font-size: 13px; font-weight: 700; color: var(--accent); flex: none; }
+  .empty { text-align: center; color: var(--muted); font-size: 14px; padding: 20px 0; }
+
+  .confirm { text-align: center; padding: 8px 0 4px; }
+  .confirm .avatar { width: 64px; height: 64px; font-size: 20px; margin: 0 auto 14px; }
+  .confirm h4 { font-size: 19px; color: var(--navy); }
+  .confirm p { color: var(--muted); font-size: 14.5px; margin-top: 4px; }
+  .actions { display: flex; gap: 10px; justify-content: center; margin-top: 22px; flex-wrap: wrap; }
+  .btn {
+    font: inherit; font-weight: 700; font-size: 15px; padding: 12px 20px; border-radius: 12px; cursor: pointer;
+    border: 1px solid var(--line); background: #fff; color: var(--navy); text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn.primary { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+  .btn[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+
+  @media (max-width: 560px) {
+    .hero { padding: 40px 0 80px; }
+    .logo { width: 80px; height: 80px; }
+    .logo img { width: 70px; height: 70px; }
+    .panel { padding: 22px 18px; }
+    .panel-head h2 { font-size: 22px; }
+    .dock { left: 16px; right: 16px; transform: none; max-width: none; }
+    .dock-btn { min-width: 84px; }
+    .sheet { top: auto; bottom: 0; width: 100%; max-height: 88%; border-radius: 18px 18px 0 0; transform: translate(-50%, 30px); padding-bottom: env(safe-area-inset-bottom); }
+    .modal.open .sheet { transform: translate(-50%, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>
 <body>
-  <main class="card">
-    <div class="tag">Halaman Ujian</div>
-    <h1>Pengurusan Farmasi</h1>
-    <p>Halaman ini berfungsi. Ini ialah halaman ujian bagi repositori <b>pengurusan-farmasi</b>.</p>
-  </main>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="logo"><img src="img/jata.png" alt="Jata Negara Malaysia"></div>
+    <div class="eyebrow">Program Perkhidmatan Farmasi · KKM</div>
+    <h1>
+      Bengkel Pelan Tindakan Bahagian Dasar &amp; Perancangan Strategik KKM <em>2027</em>
+      <span>dan Mesyuarat Teknikal Pengurusan Perkhidmatan Farmasi Bil. 2/2026</span>
+    </h1>
+    <div class="chips">
+      <span class="chip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        12 – 13 Oktober 2026
+      </span>
+      <span class="chip">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        Premier Hotel Klang
+      </span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="section" id="tentatif">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Tentatif</h2>
+          <div class="sub">Atur cara bengkel dan mesyuarat</div>
+        </div>
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" aria-selected="true" data-day="d1">12 Okt · Isnin</button>
+          <button class="tab" role="tab" aria-selected="false" data-day="d2">13 Okt · Selasa</button>
+        </div>
+      </div>
+
+      <div class="day show" id="d1" role="tabpanel">
+        <ol class="tl">
+          <li><div class="time">2.30 – 3.00 petang</div><div class="what">Daftar masuk hotel</div></li>
+          <li class="key">
+            <div class="time">3.00 – 5.30 petang</div>
+            <div class="box">
+              <span class="tag">Mesyuarat</span>
+              <div class="what">Mesyuarat Teknikal Pengurusan Perkhidmatan Farmasi Bil. 2/2026</div>
+              <ul><li>Pembentangan Prestasi Bahagian Dasar dan Perkembangan Strategik Farmasi Jan–Jun 2026</li></ul>
+            </div>
+          </li>
+          <li><div class="time">5.30 – 8.00 malam</div><div class="what">Rehat &amp; makan malam</div></li>
+          <li class="key">
+            <div class="time">8.00 – 10.30 malam</div>
+            <div class="box">
+              <span class="tag gold">Bengkel</span>
+              <div class="what">Pembentangan Pelan Strategik Program Perkhidmatan Farmasi 2026–2030</div>
+              <ul>
+                <li>Pembangunan Pelan Tindakan BDPSF 2027</li>
+                <li>Taklimat ringkas Perbincangan Kumpulan</li>
+              </ul>
+            </div>
+          </li>
+          <li><div class="time">10.30 malam</div><div class="what">Bersurai</div></li>
+        </ol>
+      </div>
+
+      <div class="day" id="d2" role="tabpanel">
+        <ol class="tl">
+          <li><div class="time">6.00 – 8.00 pagi</div><div class="what">Sarapan</div></li>
+          <li class="key"><div class="time">8.00 – 10.00 pagi</div><div class="box"><span class="tag gold">Bengkel</span><div class="what">Perbincangan Kumpulan</div></div></li>
+          <li><div class="time">10.00 – 10.30 pagi</div><div class="what">Rehat</div></li>
+          <li class="key"><div class="time">10.30 – 12.30 tengah hari</div><div class="box"><span class="tag gold">Bengkel</span><div class="what">Pembentangan Kumpulan</div></div></li>
+          <li class="key"><div class="time">12.30 – 1.00 tengah hari</div><div class="box"><span class="tag gold">Bengkel</span><div class="what">Rumusan bengkel oleh YBrs. Pengarah Bahagian Dasar &amp; Perancangan Strategik Farmasi KKM</div></div></li>
+          <li><div class="time">1.00 tengah hari</div><div class="what">Makan tengah hari dan daftar keluar hotel</div></li>
+        </ol>
+      </div>
+
+      <p class="note">*Agenda tertakluk kepada perubahan dan akan dimaklumkan dari masa ke masa.</p>
+    </div>
+  </section>
+
+  <footer>Bahagian Dasar &amp; Perancangan Strategik Farmasi · Kementerian Kesihatan Malaysia</footer>
+</main>
+
+<!-- Floating dock -->
+<nav class="dock" aria-label="Menu utama">
+  <div class="dock-track">
+    <button class="dock-btn" data-action="tentatif">
+      <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h4M8 18h8"/></svg></span>
+      <span class="lb">Tentatif</span>
+    </button>
+    <button class="dock-btn" data-action="kehadiran">
+      <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M16 11l2 2 4-4"/></svg></span>
+      <span class="lb">Kehadiran</span>
+    </button>
+    <button class="dock-btn" data-action="mesyuarat">
+      <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span>
+      <span class="lb">Mesyuarat</span>
+    </button>
+    <button class="dock-btn" data-action="bengkel">
+      <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <span class="lb">Bengkel</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="backdrop" data-close></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="sheet-head">
+      <span class="ic" id="modalIcon"></span>
+      <h3 id="modalTitle"></h3>
+      <button class="x" data-close aria-label="Tutup">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   DATA — kemas kini di sini
+   ========================================================= */
+var WHATSAPP = 'https://wa.me/601110043045';
+
+// Senarai peserta (MOCK — akan diganti). Setiap peserta ada pautan Google Form sendiri.
+var PESERTA = [
+  { nama: 'Peserta Contoh 1', organisasi: 'BDPSF, KKM', pautan: '' },
+  { nama: 'Peserta Contoh 2', organisasi: 'JKN Selangor', pautan: '' },
+  { nama: 'Peserta Contoh 3', organisasi: 'JKN Johor', pautan: '' },
+  { nama: 'Peserta Contoh 4', organisasi: 'JKN Negeri Sembilan', pautan: '' },
+  { nama: 'Peserta Contoh 5', organisasi: 'JKN Perak', pautan: '' },
+  { nama: 'Peserta Contoh 6', organisasi: 'JKN Pulau Pinang', pautan: '' },
+  { nama: 'Peserta Contoh 7', organisasi: 'JKN Sabah', pautan: '' },
+  { nama: 'Peserta Contoh 8', organisasi: 'JKN Sarawak', pautan: '' },
+  { nama: 'Peserta Contoh 9', organisasi: 'Hospital Kuala Lumpur', pautan: '' },
+  { nama: 'Peserta Contoh 10', organisasi: 'BAPF, KKM', pautan: '' }
+];
+
+var DOKUMEN_MESYUARAT = [
+  { no: '1', tajuk: 'Nota Percakapan', pautan: 'https://drive.google.com/file/d/1Bo0Q8Uh7YAE_k2r4IkcpXNmADgr2Nxvu/view?usp=drive_link' },
+  { no: '2', tajuk: 'Mesyuarat Bil. 1/2026', group: true },
+  { no: '2a', tajuk: 'Minit', pautan: 'https://drive.google.com/file/d/19wVgfk_p0iKTHd6ZNy4E_AlTbD-tb-SJ/view?usp=drive_link', sub: true },
+  { no: '2b', tajuk: 'Maklum Balas', pautan: 'https://drive.google.com/file/d/1G2m531zYftoBpnsLYwYgRYHiT79t83gu/view?usp=drive_link', sub: true },
+  { no: '3', tajuk: 'Pembentangan', ket: 'Pencapaian Petunjuk Prestasi Bahagian Dasar & Perancangan Strategik Farmasi', pautan: 'https://drive.google.com/file/d/13THlyzzNnnoHdCyzusKO1lj7j4lITKZn/view?usp=drive_link' },
+  { no: '4', tajuk: 'Isu / Cadangan', pautan: 'https://drive.google.com/file/d/1BXLccaABsuzvgAhAFOdZfoIPbE00dDOi/view?usp=drive_link' }
+];
+
+var DOKUMEN_BENGKEL = []; // pautan akan diberikan kemudian
+
+/* ========================================================= */
+(function () {
+  var modal = document.getElementById('modal');
+  var titleEl = document.getElementById('modalTitle');
+  var iconEl = document.getElementById('modalIcon');
+  var bodyEl = document.getElementById('modalBody');
+  var lastFocus = null;
+
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var initials = function (n) { return n.split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join('').toUpperCase(); };
+  var arrow = '<svg class="go" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+  var waIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.79-1.47-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35zM12.04 21.5h-.01a9.45 9.45 0 0 1-4.82-1.32l-.35-.21-3.58.94.96-3.49-.23-.36a9.43 9.43 0 0 1-1.45-5.03c0-5.22 4.25-9.46 9.48-9.46 2.53 0 4.9.99 6.69 2.78a9.4 9.4 0 0 1 2.77 6.69c0 5.22-4.25 9.46-9.46 9.46zm8.05-17.51A11.32 11.32 0 0 0 12.04.66C5.77.66.66 5.76.66 12.03c0 2 .52 3.96 1.52 5.68L.57 23.5l5.92-1.55a11.37 11.37 0 0 0 5.54 1.41h.01c6.27 0 11.37-5.1 11.38-11.37 0-3.04-1.18-5.9-3.33-8.05z"/></svg>';
+
+  var accessAlert =
+    '<div class="alert">' +
+      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>' +
+      '<div>Akses hanya diberikan kepada pengguna berdaftar sahaja. Hubungi urusetia untuk bantuan.' +
+      '<br><a class="wa" href="' + WHATSAPP + '" target="_blank" rel="noopener">' + waIcon + 'WhatsApp Urusetia</a></div>' +
+    '</div>';
+
+  function docList(items) {
+    return '<ul class="docs">' + items.map(function (d) {
+      if (d.group) return '<li class="doc-group">' + esc(d.no) + '. ' + esc(d.tajuk) + '</li>';
+      return '<li><a class="doc' + (d.sub ? ' sub' : '') + '" href="' + esc(d.pautan) + '" target="_blank" rel="noopener">' +
+        '<span class="n">' + esc(d.no) + '</span>' +
+        '<span class="t">' + esc(d.tajuk) + (d.ket ? '<small>' + esc(d.ket) + '</small>' : '') + '</span>' + arrow + '</a></li>';
+    }).join('') + '</ul>';
+  }
+
+  function open(title, iconHTML, html) {
+    lastFocus = document.activeElement;
+    titleEl.textContent = title;
+    iconEl.innerHTML = iconHTML;
+    bodyEl.innerHTML = html;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { (bodyEl.querySelector('input') || modal.querySelector('.x')).focus(); }, 50);
+  }
+  function close() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+  modal.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
+
+  // ----- Kehadiran -----
+  function renderPeople(q) {
+    q = (q || '').trim().toLowerCase();
+    var list = PESERTA.filter(function (p) { return !q || (p.nama + ' ' + p.organisasi).toLowerCase().indexOf(q) > -1; });
+    var html = '<div class="count">' + list.length + ' daripada ' + PESERTA.length + ' peserta</div>';
+    if (!list.length) return html + '<div class="empty">Tiada nama ditemui. Hubungi urusetia jika nama anda tiada dalam senarai.</div>';
+    return html + '<ul class="people">' + list.map(function (p) {
+      var i = PESERTA.indexOf(p);
+      return '<li><button class="person" data-i="' + i + '"><span class="avatar">' + esc(initials(p.nama)) + '</span>' +
+        '<span class="t">' + esc(p.nama) + '<small>' + esc(p.organisasi) + '</small></span><span class="go">Hadir →</span></button></li>';
+    }).join('') + '</ul>';
+  }
+  function showKehadiran(icon) {
+    open('Kehadiran', icon,
+      '<div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
+      '<input type="search" id="q" placeholder="Cari nama atau organisasi…" autocomplete="off"></div>' +
+      '<div id="plist">' + renderPeople('') + '</div>');
+    var q = document.getElementById('q'), plist = document.getElementById('plist');
+    q.addEventListener('input', function () { plist.innerHTML = renderPeople(q.value); });
+    plist.addEventListener('click', function (e) {
+      var b = e.target.closest('.person'); if (!b) return;
+      confirmPerson(PESERTA[+b.dataset.i], icon);
+    });
+  }
+  function confirmPerson(p, icon) {
+    var hasLink = !!p.pautan;
+    open('Sahkan Kehadiran', icon,
+      '<div class="confirm"><div class="avatar">' + esc(initials(p.nama)) + '</div>' +
+      '<h4>' + esc(p.nama) + '</h4><p>' + esc(p.organisasi) + '</p>' +
+      (hasLink ? '<p style="margin-top:14px">Anda akan dibawa ke borang Google untuk menghantar pengesahan kehadiran.</p>'
+               : '<p style="margin-top:14px">Pautan borang kehadiran belum tersedia. Sila cuba semula kemudian.</p>') +
+      '<div class="actions"><button class="btn" id="back">← Kembali</button>' +
+      '<a class="btn primary" ' + (hasLink ? 'href="' + esc(p.pautan) + '" target="_blank" rel="noopener"' : 'aria-disabled="true"') + '>Hantar Kehadiran</a></div></div>');
+    document.getElementById('back').addEventListener('click', function () { showKehadiran(icon); });
+  }
+
+  // ----- Dock actions -----
+  document.querySelectorAll('.dock-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var icon = btn.querySelector('.ic').innerHTML;
+      switch (btn.dataset.action) {
+        case 'tentatif':
+          document.getElementById('tentatif').scrollIntoView({ behavior: 'smooth' });
+          break;
+        case 'kehadiran':
+          showKehadiran(icon);
+          break;
+        case 'mesyuarat':
+          open('Mesyuarat', icon, accessAlert + docList(DOKUMEN_MESYUARAT));
+          break;
+        case 'bengkel':
+          open('Bengkel', icon, accessAlert + (DOKUMEN_BENGKEL.length ? docList(DOKUMEN_BENGKEL)
+            : '<div class="pending"><b>Pautan akan dikongsi kemudian</b>Dokumen bengkel akan dimuat naik di sini.</div>'));
+          break;
+      }
+    });
+  });
+
+  // ----- Tentatif tabs -----
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      tabs.forEach(function (x) { x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
+      document.querySelectorAll('.day').forEach(function (d) { d.classList.toggle('show', d.id === t.dataset.day); });
+    });
+  });
+  // Auto-pilih hari kedua pada 13 Okt 2026
+  var now = new Date();
+  if (now.getFullYear() === 2026 && now.getMonth() === 9 && now.getDate() === 13) tabs[1].click();
+})();
+</script>
 </body>
 </html>
