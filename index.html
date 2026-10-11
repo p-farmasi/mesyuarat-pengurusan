@@ -37,13 +37,22 @@
   /* ---------- Hero ---------- */
   .hero {
     position: relative; overflow: hidden; color: #fff;
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    background: linear-gradient(120deg, #0b2545 0%, #13315c 30%, #0d5c6e 55%, #0e9f8f 75%, #13315c 100%);
+    background-size: 200% 200%;
+    animation: heroGradient 20s ease-in-out infinite;
     padding: 56px 0 88px;
   }
-  .hero::after {
-    content: ""; position: absolute; right: -160px; bottom: -220px; width: 480px; height: 480px;
-    border-radius: 50%; border: 60px solid rgba(14,159,143,.18); pointer-events: none;
+  @keyframes heroGradient {
+    0%   { background-position: 0% 30%; }
+    50%  { background-position: 100% 70%; }
+    100% { background-position: 0% 30%; }
   }
+  /* Darken the left side so the title stays readable over the brighter teal */
+  .hero::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background: linear-gradient(90deg, rgba(11,37,69,.55) 0%, rgba(11,37,69,.15) 60%, rgba(11,37,69,0) 100%);
+  }
+  .hero-dots { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
   .hero .wrap { position: relative; z-index: 1; }
   .logo {
     width: 96px; height: 96px; border-radius: 50%; background: #fff; display: grid; place-items: center;
@@ -243,12 +252,16 @@
     .modal.open .sheet { transform: translate(-50%, 0); }
     .modal.tall .sheet { height: 88%; }
   }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+    .hero { animation: none; }
+  }
 </style>
 </head>
 <body>
 
 <header class="hero">
+  <canvas class="hero-dots" id="heroDots" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="logo"><img src="img/jata.png" alt="Jata Negara Malaysia"></div>
     <div class="eyebrow">Program Perkhidmatan Farmasi · KKM</div>
@@ -608,6 +621,79 @@ var DOKUMEN_BENGKEL = []; // pautan akan diberikan kemudian
   // Hari lalai ikut tarikh waktu Kuala Lumpur: sehingga 12 Okt → 12 Okt, selepas itu → 13 Okt
   var klDate = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kuala_Lumpur', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
   tabs[klDate <= '2026-10-12' ? 0 : 1].click();
+})();
+</script>
+<script>
+// Moving dots in the hero background
+(function () {
+  var canvas = document.getElementById('heroDots');
+  var hero = canvas.parentElement;
+  var ctx = canvas.getContext('2d');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var COLORS = ['143,216,207', '255,255,255', '14,159,143', '201,162,39'];
+  var LINK = 120;
+  var dots = [], w = 0, h = 0, dpr = 1, running = true, raf = null;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = hero.clientWidth; h = hero.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.round(Math.min(90, Math.max(28, (w * h) / 9000)));
+    while (dots.length < n) dots.push(make());
+    dots.length = n;
+    dots.forEach(function (d) { d.x = Math.min(d.x, w); d.y = Math.min(d.y, h); });
+  }
+  function make() {
+    var a = Math.random() * Math.PI * 2, sp = 0.15 + Math.random() * 0.35;
+    return {
+      x: Math.random() * (w || 800), y: Math.random() * (h || 400),
+      vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+      r: 1 + Math.random() * 2.2,
+      c: COLORS[Math.random() < 0.08 ? 3 : Math.floor(Math.random() * 3)],
+      a: 0.35 + Math.random() * 0.5,
+      tw: Math.random() * Math.PI * 2
+    };
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < dots.length; i++) {
+      var p = dots[i];
+      for (var j = i + 1; j < dots.length; j++) {
+        var q = dots[j], dx = p.x - q.x, dy = p.y - q.y, dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < LINK) {
+          ctx.strokeStyle = 'rgba(143,216,207,' + (0.18 * (1 - dist / LINK)) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+        }
+      }
+    }
+    dots.forEach(function (d) {
+      var alpha = d.a * (0.75 + 0.25 * Math.sin(d.tw));
+      ctx.fillStyle = 'rgba(' + d.c + ',' + alpha + ')';
+      ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2); ctx.fill();
+    });
+  }
+  function step() {
+    dots.forEach(function (d) {
+      d.x += d.vx; d.y += d.vy; d.tw += 0.03;
+      if (d.x < -10) d.x = w + 10; else if (d.x > w + 10) d.x = -10;
+      if (d.y < -10) d.y = h + 10; else if (d.y > h + 10) d.y = -10;
+    });
+    draw();
+    raf = running ? requestAnimationFrame(step) : null;
+  }
+  function start() { if (!reduce && !raf) { running = true; raf = requestAnimationFrame(step); } }
+  function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = null; }
+
+  resize();
+  draw();
+  window.addEventListener('resize', function () { resize(); draw(); });
+  // Pause when the hero is off-screen or the tab is hidden
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) { e[0].isIntersecting ? start() : stop(); }).observe(hero);
+  } else start();
+  document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
 })();
 </script>
 </body>
