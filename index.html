@@ -529,7 +529,7 @@ var DOKUMEN_BENGKEL = []; // pautan akan diberikan kemudian
 
   function renderPeople(q) {
     q = norm(q || '');
-    if (!q) return msg('', ICON_SEARCH, 'Cari Nama', 'Taip nama anda untuk mencari dalam senarai peserta.');
+    if (!q) return msg('', ICON_SEARCH, 'Cari Nama', 'Taip nama anda untuk mencari dalam senarai peserta bengkel/ahli mesyuarat.');
     var terms = q.split(' ');
     var list = [];
     PESERTA.forEach(function (nama, i) {
