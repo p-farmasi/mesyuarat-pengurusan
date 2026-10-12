@@ -123,14 +123,27 @@
   .kv { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
   .kv li { display: flex; align-items: center; gap: 10px; background: var(--panel); border-radius: 10px; padding: 10px 12px; font-size: 14px; }
   .kv .k { color: var(--muted); flex: none; }
-  .kv .v { flex: 1; font-weight: 700; color: var(--navy); word-break: break-all; }
+  .kv .v { flex: 1; font-weight: 700; color: var(--navy); word-break: break-word; }
+  .kv .v.nw { white-space: nowrap; }
   .copy {
-    flex: none; display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 12.5px; font-weight: 700;
-    padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--navy); cursor: pointer;
+    flex: none; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--navy); cursor: pointer;
     transition: border-color .2s, color .2s;
   }
   .copy:hover { border-color: var(--accent); color: var(--accent); }
   .copy.done { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .copy .ck, .copy.done .cp { display: none; }
+  .copy.done .ck { display: block; }
+  .info-card.wide { grid-column: 1 / -1; }
+  .meals { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 14px; }
+  .meals h4 { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .meal { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .meal li { background: var(--panel); border-radius: 10px; padding: 10px 12px; }
+  .meal .m { font-size: 15px; font-weight: 700; color: var(--navy); }
+  .meal .d { font-size: 13px; color: var(--muted); margin-top: 1px; }
+  .meal .d b { color: var(--ink); font-weight: 600; }
+  .fac { list-style: none; margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
+  .fac li { background: var(--panel); border-radius: 10px; padding: 10px 12px; font-size: 14px; color: var(--ink); }
+  .fac li b { display: block; font-size: 15px; color: var(--navy); }
 
   footer { text-align: center; font-size: 13px; color: var(--muted); margin-top: 32px; }
 
@@ -319,7 +332,7 @@
 
       <div class="day show" id="d1" role="tabpanel">
         <ol class="tl">
-          <li><div class="time">2.30 – 3.00 petang</div><div class="what">Daftar masuk hotel</div></li>
+          <li><div class="time">2.00 – 3.00 petang</div><div class="what">Daftar masuk hotel</div></li>
           <li class="key">
             <div class="time">3.00 – 5.30 petang</div>
             <div class="box">
@@ -373,8 +386,8 @@
             <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
             <h3>Daftar Masuk</h3>
           </div>
-          <div class="big">3.00 petang</div>
-          <p>Daftar masuk sebelum pukul 3.00 petang adalah tertakluk kepada kekosongan bilik.</p>
+          <div class="big">2.00 petang</div>
+          <p>Daftar masuk sebelum pukul 2.00 petang adalah tertakluk kepada kekosongan bilik.</p>
         </div>
 
         <div class="info-card">
@@ -383,10 +396,11 @@
             <h3>Akses Internet (Wifi)</h3>
           </div>
           <ul class="kv">
-            <li><span class="k">Nama:</span><span class="v">-</span></li>
-            <li><span class="k">Kata laluan:</span><span class="v" id="wifiPass">-</span>
-              <button class="copy" type="button" data-copy="wifiPass" aria-label="Salin kata laluan">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Salin</span>
+            <li><span class="k">Nama pengguna:</span><span class="v">premiere</span></li>
+            <li><span class="k">Kata laluan:</span><span class="v nw" id="wifiPass">011026</span>
+              <button class="copy" type="button" data-copy="wifiPass" aria-label="Salin kata laluan" title="Salin kata laluan">
+                <svg class="cp" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                <svg class="ck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
               </button>
             </li>
           </ul>
@@ -398,8 +412,45 @@
             <h3>Lokasi Bilik Mesyuarat</h3>
           </div>
           <ul class="kv">
-            <li><span class="k">Nama bilik:</span><span class="v">-</span></li>
-            <li><span class="k">Tingkat:</span><span class="v">-</span></li>
+            <li><span class="k">Nama bilik:</span><span class="v">Dewan Ballroom III</span></li>
+            <li><span class="k">Tingkat:</span><span class="v">Aras G</span></li>
+          </ul>
+        </div>
+
+        <div class="info-card wide">
+          <div class="ih">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V2M6 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6a2 2 0 0 0 2 2h3zm0 0v7"/></svg></div>
+            <h3>Waktu &amp; Lokasi Makan</h3>
+          </div>
+          <div class="meals">
+            <div>
+              <h4>12 Okt · Isnin</h4>
+              <ul class="meal">
+                <li><div class="m">Minum petang</div><div class="d"><b>3.00 – 3.30 petang</b> · Depan dewan</div></li>
+                <li><div class="m">Makan malam</div><div class="d"><b>6.30 – 8.30 malam</b> · Lobi, Aras L</div></li>
+                <li><div class="m">Minum malam</div><div class="d"><b>10.00 – 10.30 malam</b> · Depan dewan</div></li>
+              </ul>
+            </div>
+            <div>
+              <h4>13 Okt · Selasa</h4>
+              <ul class="meal">
+                <li><div class="m">Sarapan</div><div class="d"><b>6.00 – 8.00 pagi</b> · Lobi, Aras L</div></li>
+                <li><div class="m">Minum pagi</div><div class="d"><b>10.00 – 10.30 pagi</b> · Depan dewan</div></li>
+                <li><div class="m">Makan tengah hari</div><div class="d"><b>12.00 tengah hari – 2.00 petang</b> · Lobi, Aras L</div></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card wide">
+          <div class="ih">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div>
+            <h3>Kemudahan Hotel</h3>
+          </div>
+          <ul class="fac">
+            <li><b>Surau</b>Aras LG</li>
+            <li><b>Kolam renang</b>Aras 1</li>
+            <li><b>Pengesahan parkir</b>Maklumkan nombor bilik di kaunter penyambut tetamu sebelum keluar. Kadar tetap RM3 setiap kemasukan.</li>
           </ul>
         </div>
       </div>
@@ -532,7 +583,12 @@ var DOKUMEN_MESYUARAT = [
   { no: '4', tajuk: 'Isu / Cadangan', pautan: 'https://drive.google.com/file/d/1BXLccaABsuzvgAhAFOdZfoIPbE00dDOi/view?usp=drive_link' }
 ];
 
-var DOKUMEN_BENGKEL = []; // pautan akan diberikan kemudian
+var DOKUMEN_BENGKEL = [
+  { no: '1', tajuk: 'Status Pencapaian Pelan Tindakan 2026', pautan: 'https://docs.google.com/presentation/d/1HoGfQs0SvZMvzgOxADuLfCzImW9V0UC2/edit?usp=drive_link&ouid=105559788097757848293&rtpof=true&sd=true' },
+  { no: '2', tajuk: 'Cadangan Pelan Tindakan BDPSF 2027', group: true },
+  { no: '2a', tajuk: 'Slaid', pautan: 'https://drive.google.com/file/d/1vA4H2bMvoSzibFPm8V9cQaGa_AU5Ymex/view?usp=drive_link', sub: true },
+  { no: '2b', tajuk: 'Jadual', pautan: 'https://docs.google.com/spreadsheets/d/1IHrNxgxVgBh8Odxr8N4FbFl-JcyB3ybs/edit?usp=drive_link&ouid=105559788097757848293&rtpof=true&sd=true', sub: true }
+];
 
 /* ========================================================= */
 (function () {
@@ -688,13 +744,12 @@ var DOKUMEN_BENGKEL = []; // pautan akan diberikan kemudian
 
   // ----- Copy to clipboard -----
   document.querySelectorAll('.copy').forEach(function (b) {
-    var label = b.querySelector('span');
     b.addEventListener('click', function () {
       var text = document.getElementById(b.dataset.copy).textContent.trim();
       function done() {
-        b.classList.add('done'); label.textContent = 'Disalin';
+        b.classList.add('done'); b.title = 'Disalin';
         clearTimeout(b._t);
-        b._t = setTimeout(function () { b.classList.remove('done'); label.textContent = 'Salin'; }, 1800);
+        b._t = setTimeout(function () { b.classList.remove('done'); b.title = 'Salin kata laluan'; }, 1800);
       }
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(done, fallback);
